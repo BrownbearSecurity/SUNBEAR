@@ -78,9 +78,3 @@ Sunbear is primarily designed for local use. However, you can use tools like **R
     - Use the IP address provided by **RadminVPN** to connect to the server.
 
 Once you're connected, users can interact with the chat application just like they would on a local network.
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
