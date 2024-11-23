@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUNBEAR</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e2f;
+    color: #dcdcdc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Center container */
+.container {
+    width: 90%;
+    max-width: 500px;
+    background: #2a2a40;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column; /* Ensures vertical stacking */
+    justify-content: flex-start;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Header */
+header {
+    position: absolute;
+    top: 5vh;
+    left: 5vh;
+    background-color: #3b3b5a;
+    color: #ffffff;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 2vh;
+    border-bottom: 2px solid #4c4c6e;
+    height: 10vh;
+    width: 20vh;
+}
+
+#userList {
+    position: absolute;
+    left: 5vh;
+    top: 25vh;
+}
+
+#ipInput {
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #35354e;
+    color: #ffffff;
+    outline: none;
+}
+
+#connectButton {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#connectButton:hover {
+    background-color: #45a045;
+}
+
+/* Chat box */
+
+#chatBox {
+    background-color: #1e1e2f;
+    border-top: 1px solid #4c4c6e;
+    border-bottom: 1px solid #4c4c6e;
+    height: 80vh; /* Set a fixed height */
+    width: 150vh;
+}
+
+#chatBox div {
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+#chatBox div:nth-child(odd) {
+    background-color: #35354e;
+}
+
+#chatBox div:nth-child(even) {
+    background-color: #3b3b5a;
+}
+
+/* Message input and send button section */
+footer {
+    position: absolute;
+    right: 3vh;
+    flex-direction: column; /* Stack inputs and buttons vertically */
+    align-items: stretch;
+    padding: 15px 20px;
+    background-color: #252539;
+    gap: 10px; /* Add spacing between elements */
+}
+
+#messageInput {
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #35354e;
+    color: #ffffff;
+    outline: none;
+}
+
+#sendButton {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#sendButton:hover {
+    background-color: #45a045;
+}
+
+/* Scrollbar customization */
+#chatBox::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chatBox::-webkit-scrollbar-thumb {
+    background-color: #4c4c6e;
+    border-radius: 4px;
+}
+
+#chatBox::-webkit-scrollbar-thumb:hover {
+    background-color: #5e5e7e;
+}
+
+/* Style for user list items */
+.user-item {
+    position: absolute;
+    left: 5vh;
+    font-size: 11px; /* Adjust font size */
+    color: black;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-direction: column; /* Stack elements vertically */
+}
+
+/* Style for the username */
+.user-item .username {
+    font-size: 18px; /* Adjust size of the username */
+}
+
+/* Style for the custom text (golden and smaller) */
+.user-item .custom-text {
+    font-size: 9px; /* Smaller golden text */
+    color: gold;
+    margin-top: 5px; /* Add some space between username and custom text */
+}
+/* Style for the custom text box (hidden by default) */
+.custom-text-box {
+    display: none; /* Hidden by default */
+    position: absolute; /* Position relative to the user item */
+    top: 30px; /* Positioning it below the username */
+    left: 50%;
+    transform: translateX(-50%); /* Center the box */
+    background-color: rgba(0, 0, 0, 0.7); /* Slight dark background */
+    color: gold; /* Golden text */
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px; /* Smaller font size */
+    font-weight: bold;
+    width: 150px; /* Width of the box */
+    cursor: move; /* Indicate that the box is draggable */
+    z-index: 10; /* Ensure it appears above other elements */
+}
+
+/* Style for the drag handle (can use the box itself) */
+.custom-text-box:active {
+    cursor: grabbing;
+}
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <h2>SUNBEAR</h2>
+    </header>
+
+    <!-- LOGIN SECTION -->
+    <div class="container">
+        <div id="loginSection">
+            <input type="text" id="ipInput" placeholder="Server IP (e.g., ws://localhost:8080)" />
+            <input type="text" id="usernameInput" placeholder="Username" />
+            <input type="password" id="passwordInput" placeholder="Password" />
+            <button id="loginButton">Login</button>
+            <p id="loginMessage"></p>
+        </div>
+    </div>
+
+    <!-- CHAT SECTION -->
+    
+        <footer>
+            <div id="oof" style="display: none;">
+            <div id="chatSection" style="display: none;">
+                <div id="chatBox"></div>
+            </div>
+
+            <input type="text" id="messageInput" placeholder="Type your message..." />
+            <button id="sendButton">Send</button>
+            </div>
+        </footer>
+
+        <div id="userList">
+            <h3>Users Online:</h3>
+            <ul id="userListContent"></ul>
+        </div>
+    </div>
+
+    <script>
+        let socket = null; // WebSocket connection
+        const loginSection = document.getElementById('loginSection');
+        const chatSection = document.getElementById('chatSection');
+        const chatBox = document.getElementById('chatBox');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const ipInput = document.getElementById('ipInput');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginButton = document.getElementById('loginButton');
+        const loginMessage = document.getElementById('loginMessage');
+        const userListContent = document.getElementById('userListContent');
+
+        loginButton.onclick = () => {
+            const serverIP = ipInput.value.trim();
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!serverIP || !username || !password) {
+                loginMessage.textContent = "Server IP, username, and password are required.";
+                return;
+            }
+
+            socket = new WebSocket(serverIP);
+
+            socket.onopen = () => {
+                socket.send(JSON.stringify({ type: 'login', username, password }));
+            };
+
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'login_response') {
+                    if (data.success) {
+                        loginSection.style.display = 'none';
+                        chatSection.style.display = 'block';
+                        oof.style.display='block';
+                    } else {
+                        loginMessage.textContent = data.message;
+                    }
+                } else if (data.type === 'message') {
+                    displayMessage(data.message, data.sender);
+                } else if (data.type === 'user_list') {
+                    updateUserList(data.users);
+                }
+            };
+
+            socket.onerror = () => {
+                loginMessage.textContent = "Connection error.";
+            };
+        };
+
+        sendButton.onclick = () => {
+            const message = messageInput.value.trim();
+            if (message && socket) {
+                socket.send(JSON.stringify({ type: 'message', message }));
+                messageInput.value = '';
+            }
+        };
+
+        function displayMessage(message, sender = "Server") {
+            const div = document.createElement('div');
+            div.textContent = `${sender}: ${message}`;
+            chatBox.appendChild(div);
+        }
+
+        function updateUserList(users) {
+    userListContent.innerHTML = ''; // Clear the current list
+    users.forEach((user) => {
+        const li = document.createElement('li');
+        li.classList.add('user-item'); // Add user-item class for styling
+
+        // Create the username element
+        const username = document.createElement('span');
+        username.textContent = user.username;
+        username.classList.add('username'); // Add class for styling the username
+        li.appendChild(username);
+
+        // Check if the user has custom text and create the draggable box
+        if (user.customText) {
+            const customTextBox = document.createElement('div');
+            customTextBox.textContent = user.customText;
+            customTextBox.classList.add('custom-text-box'); // Add class for the draggable box
+            li.appendChild(customTextBox);
+
+            // When the username is clicked, toggle visibility of the custom text box
+            username.addEventListener('click', () => {
+                // Toggle the visibility of the custom text box
+                customTextBox.style.display = customTextBox.style.display === 'block' ? 'none' : 'block';
+            });
+
+            // Make the custom text box draggable
+            customTextBox.addEventListener('mousedown', (e) => {
+                const offsetX = e.clientX - customTextBox.getBoundingClientRect().left;
+                const offsetY = e.clientY - customTextBox.getBoundingClientRect().top;
+
+                function onMouseMove(e) {
+                    customTextBox.style.left = `${e.clientX - offsetX}px`;
+                    customTextBox.style.top = `${e.clientY - offsetY}px`;
+                }
+
+                function onMouseUp() {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+        }
+
+        // Append the list item to the user list container
+        userListContent.appendChild(li);
+    });
+}
+    </script>
+</body>
+</html>

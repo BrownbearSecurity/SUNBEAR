@@ -1,0 +1,10 @@
+{
+    "user1": {
+        "password": "pass",
+        "customText": "oof."
+    },
+    "user2": {
+        "password": "password456",
+        "customText": "User2 has some notes here."
+    }
+}
