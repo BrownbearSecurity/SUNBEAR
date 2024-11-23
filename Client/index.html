@@ -248,6 +248,7 @@ footer {
         const loginMessage = document.getElementById('loginMessage');
         const userListContent = document.getElementById('userListContent');
 
+
         loginButton.onclick = () => {
             const serverIP = ipInput.value.trim();
             const username = usernameInput.value.trim();
@@ -265,22 +266,27 @@ footer {
             };
 
             socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
+    const data = JSON.parse(event.data);
 
-                if (data.type === 'login_response') {
-                    if (data.success) {
-                        loginSection.style.display = 'none';
-                        chatSection.style.display = 'block';
-                        oof.style.display='block';
-                    } else {
-                        loginMessage.textContent = data.message;
-                    }
-                } else if (data.type === 'message') {
-                    displayMessage(data.message, data.sender);
-                } else if (data.type === 'user_list') {
-                    updateUserList(data.users);
-                }
-            };
+    if (data.type === 'login_response') {
+        if (data.success) {
+            loginSection.style.display = 'none';
+            chatSection.style.display = 'block';
+            oof.style.display = 'block';
+        } else {
+            loginMessage.textContent = data.message;
+        }
+    } else if (data.type === 'message') {
+        displayMessage(data.message, data.sender);
+    } else if (data.type === 'user_list') {
+        updateUserList(data.users);
+    } else if (data.type === 'chat_history') {
+        // Load the chat history when the user joins
+        data.history.forEach(msg => {
+            displayMessage(msg.message, msg.sender);
+        });
+    }
+};
 
             socket.onerror = () => {
                 loginMessage.textContent = "Connection error.";
@@ -296,10 +302,10 @@ footer {
         };
 
         function displayMessage(message, sender = "Server") {
-            const div = document.createElement('div');
-            div.textContent = `${sender}: ${message}`;
-            chatBox.appendChild(div);
-        }
+    const div = document.createElement('div');
+    div.textContent = `${sender}: ${message}`;
+    chatBox.appendChild(div);
+}
 
         function updateUserList(users) {
     userListContent.innerHTML = ''; // Clear the current list

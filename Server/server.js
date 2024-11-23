@@ -12,6 +12,17 @@ try {
     console.error('Erreur lors du chargement du fichier users.json:', err);
 }
 
+// Initialize chat history
+let chatHistory = [];
+
+// Load chat history from file if it exists
+try {
+    const savedHistory = fs.readFileSync('./chat_history.json', 'utf-8');
+    chatHistory = JSON.parse(savedHistory);
+} catch (err) {
+    console.log('No previous chat history found, starting fresh.');
+}
+
 // Helper function to get the server's IP address
 function getServerIP() {
     const interfaces = os.networkInterfaces();
@@ -39,10 +50,14 @@ const clients = new Map(); // Map to track connected clients and their usernames
 wss.on('connection', (ws) => {
     console.log('A new client connected.');
 
+    // Send the chat history to the new client
+    ws.send(JSON.stringify({ type: 'chat_history', history: chatHistory }));
+
     ws.on('message', (data) => {
         try {
             const message = JSON.parse(data);
 
+            // Login handler
             if (message.type === 'login') {
                 const { username, password } = message;
 
@@ -56,9 +71,17 @@ wss.on('connection', (ws) => {
                 }
             }
 
+            // Chat message handler
             if (message.type === 'message') {
                 const sender = clients.get(ws) || 'Anonymous';
                 broadcastMessage(message.message, sender);
+
+                // Save the message to the chat history
+                const chatMessage = { sender, message: message.message, timestamp: new Date().toISOString() };
+                chatHistory.push(chatMessage);
+
+                // Write the chat history to a file
+                fs.writeFileSync('./chat_history.json', JSON.stringify(chatHistory, null, 2));
             }
         } catch (err) {
             console.error('Error handling message:', err);
